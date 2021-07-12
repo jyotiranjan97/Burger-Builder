@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
+import Modal from "../../components/UI/Modal/Modal";
 import Aux from "../../hoc/Auxiliary/Auxiliary";
+import OrderSummary from "../../components/Burger/OrderSummery/OrderSummery";
 
 const PRICES = {
   salad: 5,
@@ -10,7 +12,7 @@ const PRICES = {
   chicken: 20,
 };
 
-function BurgerBuilder() {
+function BurgerBuilder(props) {
   const [burgerIngredients, setBurgerIngredients] = useState({
     salad: 1,
     cheese: 0,
@@ -25,6 +27,7 @@ function BurgerBuilder() {
     paneer: true,
     chicken: true,
   });
+  const [purchasing, setPurchasing] = useState(false);
 
   const onAddIngredient = (type) => {
     const oldCount = burgerIngredients[type];
@@ -74,6 +77,18 @@ function BurgerBuilder() {
     setIsButtonDisabled(disabledInfo);
   };
 
+  const purchaseHandler = () => {
+    setPurchasing(true);
+  };
+
+  const purchaseCancelHandler = () => {
+    setPurchasing(false);
+  };
+
+  const purchaseContinueHandler = () => {
+    props.history.push("/checkout");
+  };
+
   const burger = (
     <Aux>
       <Burger burgerIngredients={burgerIngredients} />
@@ -83,11 +98,28 @@ function BurgerBuilder() {
         disabled={isButtonDisabled}
         purchasable={purchasable}
         price={totalPrice}
+        ordered={purchaseHandler}
       />
     </Aux>
   );
 
-  return <Aux>{burger}</Aux>;
+  const orderSummary = (
+    <OrderSummary
+      ingredients={burgerIngredients}
+      price={totalPrice}
+      purchaseCancelled={purchaseCancelHandler}
+      purchaseContinued={purchaseContinueHandler}
+    />
+  );
+
+  return (
+    <Aux>
+      <Modal show={purchasing} modalClosed={purchaseCancelHandler}>
+        {orderSummary}
+      </Modal>
+      {burger}
+    </Aux>
+  );
 }
 
 export default BurgerBuilder;
