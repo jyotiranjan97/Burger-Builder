@@ -86,7 +86,10 @@ function BurgerBuilder(props) {
   };
 
   const purchaseContinueHandler = () => {
-    props.history.push("/checkout");
+    props.history.push({
+      pathname: "/checkout",
+      state: [burgerIngredients],
+    });
   };
 
   const burger = (
