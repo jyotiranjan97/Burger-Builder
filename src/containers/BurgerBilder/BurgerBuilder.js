@@ -19,6 +19,12 @@ function BurgerBuilder() {
   });
   const [totalPrice, setTotalPrice] = useState(20);
   const [purchasable, setPurchasable] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState({
+    salad: false,
+    cheese: true,
+    paneer: true,
+    chicken: true,
+  });
 
   const onAddIngredient = (type) => {
     const oldCount = burgerIngredients[type];
@@ -30,6 +36,7 @@ function BurgerBuilder() {
     setBurgerIngredients(updatedIngredients);
     setTotalPrice(priceAmount);
     setPurchasable(updatePurchaseState(updatedIngredients));
+    buttonDisableCheck(updatedIngredients);
   };
 
   const onRemoveIngredient = (type) => {
@@ -43,6 +50,7 @@ function BurgerBuilder() {
     setBurgerIngredients(updatedIngredients);
     setTotalPrice(priceAmount);
     setPurchasable(updatePurchaseState(updatedIngredients));
+    buttonDisableCheck(updatedIngredients);
   };
 
   const updatePurchaseState = (ingredients) => {
@@ -56,12 +64,23 @@ function BurgerBuilder() {
     return sum > 0;
   };
 
+  const buttonDisableCheck = (ingredients) => {
+    const disabledInfo = {
+      ...ingredients,
+    };
+    for (let key in disabledInfo) {
+      disabledInfo[key] = disabledInfo[key] <= 0;
+    }
+    setIsButtonDisabled(disabledInfo);
+  };
+
   const burger = (
     <Aux>
       <Burger burgerIngredients={burgerIngredients} />
       <BuildControls
         addIngredient={onAddIngredient}
         removeIngredient={onRemoveIngredient}
+        disabled={isButtonDisabled}
         purchasable={purchasable}
         price={totalPrice}
       />
