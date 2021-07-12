@@ -1,8 +1,8 @@
 import React from "react";
-import "./BurgerIngredient.css";
+import classes from "./BurgerIngredient.module.css";
 
 function Paneer() {
-  return <div className="Paneer"></div>;
+  return <div className={classes.Paneer}></div>;
 }
 
 export default Paneer;

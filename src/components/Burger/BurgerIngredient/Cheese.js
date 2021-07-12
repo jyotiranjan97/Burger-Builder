@@ -1,8 +1,8 @@
 import React from "react";
-import "./BurgerIngredient.css";
+import classes from "./BurgerIngredient.module.css";
 
 function Cheese() {
-  return <div className="Cheese"></div>;
+  return <div className={classes.Cheese}></div>;
 }
 
 export default Cheese;

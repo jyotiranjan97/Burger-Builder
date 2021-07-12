@@ -1,8 +1,8 @@
 import React from "react";
-import "./BurgerIngredient.css";
+import classes from "./BurgerIngredient.module.css";
 
 function Chicken() {
-  return <div className="Chicken"></div>;
+  return <div className={classes.Chicken}></div>;
 }
 
 export default Chicken;

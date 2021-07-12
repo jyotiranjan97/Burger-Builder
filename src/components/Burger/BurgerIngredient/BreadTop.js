@@ -1,11 +1,11 @@
 import React from "react";
-import "./BurgerIngredient.css";
+import classes from "./BurgerIngredient.module.css";
 
 function BreadTop() {
   return (
-    <div className="BreadTop">
-      <div className="Seeds1"></div>
-      <div className="Seeds2"></div>
+    <div className={classes.BreadTop}>
+      <div className={classes.Seeds1}></div>
+      <div className={classes.Seeds2}></div>
     </div>
   );
 }

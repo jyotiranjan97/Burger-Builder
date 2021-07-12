@@ -1,8 +1,8 @@
 import React from "react";
-import "./BurgerIngredient.css";
+import classes from "./BurgerIngredient.module.css";
 
 function BreadBottom() {
-  return <div className="BreadBottom"></div>;
+  return <div className={classes.BreadBottom}></div>;
 }
 
 export default BreadBottom;
