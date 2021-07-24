@@ -46,7 +46,7 @@ const setIngredients = (state, action) => {
       paneer: action.ingredients.paneer,
       chicken: action.ingredients.chicken,
     },
-    totalPrice: 4,
+    totalPrice: 20,
     error: false,
   });
 };

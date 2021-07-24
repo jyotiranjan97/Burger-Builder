@@ -1,59 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
 import Burger from "../../components/Burger/Burger";
 import Modal from "../../components/UI/Modal/Modal";
 import Aux from "../../hoc/Auxiliary/Auxiliary";
 import OrderSummary from "../../components/Burger/OrderSummery/OrderSummery";
-
-const PRICES = {
-  salad: 5,
-  cheese: 10,
-  paneer: 15,
-  chicken: 20,
-};
+import Spinner from "../../components/UI/Spinner/Spinner";
+import * as actions from "../../store/actions/index";
 
 function BurgerBuilder(props) {
-  const [burgerIngredients, setBurgerIngredients] = useState({
-    salad: 1,
-    cheese: 0,
-    paneer: 0,
-    chicken: 0,
-  });
-  const [totalPrice, setTotalPrice] = useState(20);
+  const dispatch = useDispatch();
+  const burgerIngredients = useSelector(
+    (state) => state.burgerBuilder.ingredients
+  );
+  const totalPrice = useSelector((state) => state.burgerBuilder.totalPrice);
+
   const [purchasable, setPurchasable] = useState(true);
-  const [isButtonDisabled, setIsButtonDisabled] = useState({
-    salad: false,
-    cheese: true,
-    paneer: true,
-    chicken: true,
-  });
+  const [isButtonDisabled, setIsButtonDisabled] = useState({});
   const [purchasing, setPurchasing] = useState(false);
 
+  useEffect(() => {
+    dispatch(actions.initIngredients());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (burgerIngredients) {
+      setPurchasable(updatePurchaseState(burgerIngredients));
+      buttonDisableCheck(burgerIngredients);
+    }
+  }, [burgerIngredients]);
+
   const onAddIngredient = (type) => {
-    const oldCount = burgerIngredients[type];
-    const updatedCount = oldCount + 1;
-    const updatedIngredients = { ...burgerIngredients };
-    updatedIngredients[type] = updatedCount;
-    let priceAmount = totalPrice;
-    priceAmount += PRICES[type];
-    setBurgerIngredients(updatedIngredients);
-    setTotalPrice(priceAmount);
-    setPurchasable(updatePurchaseState(updatedIngredients));
-    buttonDisableCheck(updatedIngredients);
+    dispatch(actions.addIngredient(type));
   };
 
   const onRemoveIngredient = (type) => {
-    const oldCount = burgerIngredients[type];
-    if (oldCount <= 0) return;
-    const updatedCount = oldCount - 1;
-    const updatedIngredients = { ...burgerIngredients };
-    let priceAmount = totalPrice;
-    priceAmount -= PRICES[type];
-    updatedIngredients[type] = updatedCount;
-    setBurgerIngredients(updatedIngredients);
-    setTotalPrice(priceAmount);
-    setPurchasable(updatePurchaseState(updatedIngredients));
-    buttonDisableCheck(updatedIngredients);
+    dispatch(actions.removeIngredient(type));
   };
 
   const updatePurchaseState = (ingredients) => {
@@ -86,13 +69,11 @@ function BurgerBuilder(props) {
   };
 
   const purchaseContinueHandler = () => {
-    props.history.push({
-      pathname: "/checkout",
-      state: [burgerIngredients],
-    });
+    dispatch(actions.purchaseInit());
+    props.history.push("/checkout");
   };
 
-  const burger = (
+  const burger = burgerIngredients ? (
     <Aux>
       <Burger burgerIngredients={burgerIngredients} />
       <BuildControls
@@ -104,16 +85,18 @@ function BurgerBuilder(props) {
         ordered={purchaseHandler}
       />
     </Aux>
+  ) : (
+    <Spinner />
   );
 
-  const orderSummary = (
+  const orderSummary = burgerIngredients ? (
     <OrderSummary
       ingredients={burgerIngredients}
       price={totalPrice}
       purchaseCancelled={purchaseCancelHandler}
       purchaseContinued={purchaseContinueHandler}
     />
-  );
+  ) : null;
 
   return (
     <Aux>
