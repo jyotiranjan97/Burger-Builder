@@ -1,9 +1,16 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
+
 import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSummary";
 import ContactData from "./ContactData/ContactData";
 
 function Checkout(props) {
+  const burgerIngredients = useSelector(
+    (state) => state.burgerBuilder.ingredients
+  );
+  const purchased = useSelector((state) => state.order.purchased);
+
   const checkoutCancelledHandler = () => {
     props.history.goBack();
   };
@@ -13,13 +20,13 @@ function Checkout(props) {
   };
 
   let summary = <Redirect to="/" />;
-  if (props.ings) {
-    const purchasedRedirect = props.purchased ? <Redirect to="/" /> : null;
+  if (burgerIngredients) {
+    const purchasedRedirect = purchased ? <Redirect to="/" /> : null;
     summary = (
       <div>
         {purchasedRedirect}
         <CheckoutSummary
-          ingredients={props.ings}
+          ingredients={burgerIngredients}
           checkoutCancelled={checkoutCancelledHandler}
           checkoutContinued={checkoutContinuedHandler}
         />

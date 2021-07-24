@@ -1,9 +1,19 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import Input from "../../../components/UI/Input/Input";
 import Button from "../../../components/UI/Button/Button";
+import * as actions from "../../../store/actions/index";
 import classes from "./ContactData.module.css";
 
-function ContactData(props) {
+function ContactData() {
+  const dispatch = useDispatch();
+  const burgerIngredients = useSelector(
+    (state) => state.burgerBuilder.ingredients
+  );
+  const price = useSelector((state) => state.burgerBuilder.totalPrice);
+  // const loading = useSelector((state) => state.orders.loading);
+
   const [orderForm, setOrderForm] = useState({
     name: {
       elementType: "input",
@@ -40,8 +50,8 @@ function ContactData(props) {
       value: "",
       validation: {
         required: true,
-        minLength: 5,
-        maxLength: 5,
+        minLength: 6,
+        maxLength: 6,
         isNumeric: true,
       },
       valid: false,
@@ -97,12 +107,12 @@ function ContactData(props) {
       formData[formElementIdentifier] = orderForm[formElementIdentifier].value;
     }
     const order = {
-      ingredients: props.ings,
-      price: props.price,
+      ingredients: burgerIngredients,
+      price: price,
       orderData: formData,
     };
 
-    props.onOrderBurger(order);
+    dispatch(actions.purchaseBurger(order));
   };
 
   const checkValidity = (value, rules) => {
