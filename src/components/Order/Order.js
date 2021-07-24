@@ -21,7 +21,8 @@ function Order(props) {
 
   return (
     <div className={classes.Order}>
-      <p>Ingredients: {ingredientOutput}</p>
+      <p className={classes.Header}>Ingredients</p>
+      <p className={classes.Ingredients}>{ingredientOutput}</p>
       <p>
         Price: <strong>INR {Number.parseFloat(props.price).toFixed(2)}</strong>
       </p>

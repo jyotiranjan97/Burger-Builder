@@ -12,7 +12,6 @@ function App() {
         <Switch>
           <Route path="/checkout" component={Checkout} />
           <Route path="/orders" component={Orders} />
-          <Route path="/auth" component={BurgerBuilder} />
           <Route path="/" exact component={BurgerBuilder} />
         </Switch>
       </Layout>

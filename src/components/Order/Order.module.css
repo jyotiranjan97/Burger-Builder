@@ -7,10 +7,17 @@
   box-sizing: border-box;
 }
 
+.Header {
+  font-weight: 500;
+}
+
 .Ingredient {
   display: inline-block;
-  margin: 0 8px;
+  margin: 4px 8px;
   border: 1px solid #ccc;
   padding: 5px;
   text-transform: capitalize;
+  flex: auto;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
